@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { races } from "@/lib/data";
 import { shortDate, weekendRace, upcomingRaces } from "@/lib/dates";
 import type { Race } from "@/lib/types";
@@ -67,7 +68,7 @@ function EmptyWeekend() {
   );
 }
 
-export function RacesSection() {
+export function RacesSection({ variant = "full" }: { variant?: "home" | "full" }) {
   const mounted = useMounted();
   const now = mounted ? new Date() : null;
 
@@ -96,35 +97,44 @@ export function RacesSection() {
             <div className="sh-meta">The headline race, highlighted automatically by date</div>
           </div>
           {featured ? <FeaturedRace race={featured} label={label} /> : <EmptyWeekend />}
+          {variant === "home" && (
+            <div style={{ marginTop: 22 }}>
+              <Link className="btn ghost" href="/raceday">
+                See the full RaceDay calendar →
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 
-      <section className="sec" style={{ paddingTop: 0 }}>
-        <div className="wrap">
-          <div className="sechead">
-            <h2>Upcoming races</h2>
-            <div className="sh-meta">auto-sorted · past races drop off on their own</div>
-          </div>
-          <div className="upcoming">
-            {list.map((r) => (
-              <div className="ucard" key={r.name}>
-                <span className="when">{shortDate(r.date)}</span>
-                <h3>{r.name}</h3>
-                <div className="meta">
-                  {r.time} · {r.distance}
-                  <br />
-                  {r.location}
+      {variant === "full" && (
+        <section className="sec" style={{ paddingTop: 0 }}>
+          <div className="wrap">
+            <div className="sechead">
+              <h2>Upcoming races</h2>
+              <div className="sh-meta">auto-sorted · past races drop off on their own</div>
+            </div>
+            <div className="upcoming">
+              {list.map((r) => (
+                <div className="ucard" key={r.name}>
+                  <span className="when">{shortDate(r.date)}</span>
+                  <h3>{r.name}</h3>
+                  <div className="meta">
+                    {r.time} · {r.distance}
+                    <br />
+                    {r.location}
+                  </div>
+                  <span className="tag">{r.host}</span>
                 </div>
-                <span className="tag">{r.host}</span>
-              </div>
-            ))}
-            <a className="ucard submit" href={`mailto:${site.contactEmail}?subject=Race%20to%20add`}>
-              <h3>＋ Know a race we&rsquo;re missing?</h3>
-              <p>Submit it and we&rsquo;ll verify &amp; add it.</p>
-            </a>
+              ))}
+              <a className="ucard submit" href={`mailto:${site.contactEmail}?subject=Race%20to%20add`}>
+                <h3>＋ Know a race we&rsquo;re missing?</h3>
+                <p>Submit it and we&rsquo;ll verify &amp; add it.</p>
+              </a>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }

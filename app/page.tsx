@@ -2,13 +2,12 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { RacesSection } from "@/components/RacesSection";
-import { ClubDirectory } from "@/components/ClubDirectory";
+import { FeaturedClubs } from "@/components/FeaturedClubs";
 import { clubs } from "@/lib/data";
 import { copy } from "@/lib/site";
 
 export default function HomePage() {
   const groupRunsPerWeek = clubs.reduce((sum, c) => sum + c.days.length, 0);
-  const newbiePicks = clubs.filter((c) => c.newbie);
 
   return (
     <>
@@ -65,30 +64,9 @@ export default function HomePage() {
         <circle cx="600" cy="7" r="4.5" />
       </svg>
 
-      <RacesSection />
+      <RacesSection variant="home" />
 
-      <section className="sec" id="newbie" style={{ paddingTop: 0 }}>
-        <div className="wrap">
-          <div className="newbie">
-            <div className="nb-eyebrow">★ Never done a group run?</div>
-            <h2>Start here — you won&rsquo;t be last, and you won&rsquo;t be alone</h2>
-            <p className="nb-lead">{copy.newbieLead}</p>
-            <div className="nb-cards">
-              {newbiePicks.map((c) => (
-                <div className="nb-card" key={c.slug}>
-                  <div className="nb-day">
-                    {c.days[0]} · {c.area}
-                  </div>
-                  <h3>{c.name}</h3>
-                  <p>{c.newbie}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <ClubDirectory />
+      <FeaturedClubs />
 
       <section className="founder">
         <div className="wrap">
